@@ -4,6 +4,7 @@ import { ParsedMessage } from "../src/types/whatsapp";
 
 describe("Withdrawal Flow", () => {
   beforeEach(() => {
+    process.env.WALLET_ENCRYPTION_KEY = "ab".repeat(32);
     _test.clear();
   });
 
