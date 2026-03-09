@@ -90,7 +90,21 @@ const STRATEGY_MAP: Record<string, Strategy> = {
 const GREETINGS = new Set(["hi", "hello", "hey", "start", "helo", "yo"]);
 
 /** Triggers that should show the help menu */
-const HELP_TRIGGERS = new Set(["help", "?", "what can you do", "commands", "menu"]);
+const HELP_TRIGGERS = new Set([
+  "help",
+  "?",
+  "what can you do",
+  "what do you do",
+  "what can i do",
+  "commands",
+  "menu",
+  "options",
+  "features",
+  "list commands",
+  "show commands",
+  "show menu",
+  "what are my options",
+]);
 
 const WITHDRAWAL_KEYWORDS = new Set([
   "withdraw",
@@ -118,6 +132,10 @@ const FAQ: FaqEntry[] = [
       /\bsecure\b/i,
       /\bsecurity\b/i,
       /\blose\s+my\s+(money|funds|usdc)\b/i,
+      /\bcan\s+i\s+trust\b/i,
+      /\bis\s+this\s+(legit|legitimate|real|safe)\b/i,
+      /\bwill\s+i\s+lose\b/i,
+      /\bprotect(ed)?\s+my\s+(money|funds)\b/i,
     ],
     answer:
       "🔒 *Is my money safe?*\n\n" +
@@ -136,6 +154,10 @@ const FAQ: FaqEntry[] = [
       /\bget\s+my\s+(money|funds|usdc)\s+out\b/i,
       /\bcash\s+out\b/i,
       /\bpull\s+out\b/i,
+      /\bwant\s+(my\s+)?(money|funds|usdc)\s+back\b/i,
+      /\bsend\s+(money|funds|usdc)\s+to\s+me\b/i,
+      /\bwithdraw\s+funds\b/i,
+      /\bhow\s+to\s+withdraw\b/i,
     ],
     answer:
       "💸 *How do I withdraw?*\n\n" +
@@ -153,6 +175,8 @@ const FAQ: FaqEntry[] = [
       /\bhow\s+much\s+(do\s+i\s+need|to\s+start|minimum)\b/i,
       /\bminimum\s+investment\b/i,
       /\bsmallest\s+deposit\b/i,
+      /\bhow\s+much\s+to\s+invest\b/i,
+      /\bminimum\s+amount\b/i,
     ],
     answer:
       "💵 *Minimum deposit*\n\n" +
@@ -167,6 +191,11 @@ const FAQ: FaqEntry[] = [
       /\bcharge[s]?\b/i,
       /\bcost[s]?\b/i,
       /\bcommission\b/i,
+      /\bhow\s+much\s+does\s+it\s+cost\b/i,
+      /\bdo\s+you\s+take\s+a\s+cut\b/i,
+      /\bwhat\s+do\s+you\s+take\b/i,
+      /\bperformance\s+fee\b/i,
+      /\bhidden\s+(fee[s]?|charge[s]?)\b/i,
     ],
     answer:
       "💰 *Fees*\n\n" +
@@ -184,6 +213,10 @@ const FAQ: FaqEntry[] = [
       /\bstellar\b.*\bwhat\b/i,
       /\bwhat\s+blockchain\b/i,
       /\bwhy\s+stellar\b/i,
+      /\bwhat\s+is\s+stellar\b/i,
+      /\bwhat\s+is\s+defi\b/i,
+      /\bhow\s+does\s+(this|it|neurowealth)\s+work\b/i,
+      /\bexplain\b.*\b(stellar|usdc|defi)\b/i,
     ],
     answer:
       "🌐 *About Stellar & USDC*\n\n" +
@@ -199,6 +232,8 @@ const FAQ: FaqEntry[] = [
       /\bswitch\s+(my\s+)?strategy\b/i,
       /\bupdate\s+(my\s+)?strategy\b/i,
       /\bdifferent\s+strategy\b/i,
+      /\bchange\s+my\s+plan\b/i,
+      /\bswitch\s+plan\b/i,
     ],
     answer:
       "🔄 *Changing your strategy*\n\n" +
@@ -214,6 +249,9 @@ const FAQ: FaqEntry[] = [
       /\bdeposit\s+address\b/i,
       /\bwhere\s+do\s+i\s+send\b/i,
       /\bwallet\s+address\b/i,
+      /\bhow\s+to\s+(add|put|send)\s+(money|funds|usdc)\b/i,
+      /\bfund\s+my\s+account\b/i,
+      /\bhow\s+to\s+deposit\b/i,
     ],
     answer:
       "📥 *How to deposit*\n\n" +
@@ -230,6 +268,9 @@ const FAQ: FaqEntry[] = [
       /\byield\b.*\bhow\s+often\b/i,
       /\bcompound\b/i,
       /\brebalance\b/i,
+      /\bwhen\s+do\s+i\s+get\s+(my\s+)?interest\b/i,
+      /\bhow\s+is\s+(the\s+)?yield\s+paid\b/i,
+      /\bdo\s+earnings\s+compound\b/i,
     ],
     answer:
       "⏱ *When do I earn yield?*\n\n" +
@@ -238,6 +279,100 @@ const FAQ: FaqEntry[] = [
       "• Your portfolio value updates in real-time\n" +
       "• Reply *BALANCE* anytime to see your current earnings\n\n" +
       "Yield compounds into your position — no manual claiming needed.",
+  },
+  // ── NEW: What can you do / capabilities ──────────────────────────────────
+  {
+    patterns: [
+      /\bwhat\s+can\s+(you|neurowealth)\s+do\b/i,
+      /\bwhat\s+do\s+you\s+offer\b/i,
+      /\bwhat\s+(are|is)\s+(your|the)\s+(feature[s]?|capabilities?|service[s]?)\b/i,
+      /\btell\s+me\s+about\s+neurowealth\b/i,
+      /\bwhat\s+is\s+neurowealth\b/i,
+      /\babout\s+neurowealth\b/i,
+      /\bhow\s+does\s+neurowealth\s+work\b/i,
+    ],
+    answer:
+      "🤖 *What NeuroWealth can do for you*\n\n" +
+      "NeuroWealth is your AI-powered DeFi agent on Stellar. Here's what I do:\n\n" +
+      "• 💰 *Grow your USDC* — automatically, 24/7\n" +
+      "• 📊 *Three strategies* — Conservative (3–6%), Balanced (6–10%), Growth (10–15%)\n" +
+      "• 📥 *Instant deposits* — funds deployed the moment they arrive\n" +
+      "• 💸 *Anytime withdrawals* — no lock-ups, no minimums (above 10 USDC)\n" +
+      "• 📈 *Live balance* — reply BALANCE to check your earnings\n" +
+      "• 🔒 *Non-custodial* — your keys, your funds\n\n" +
+      "Reply *HELP* to see all available commands.",
+  },
+  // ── NEW: APY / returns / how much will I earn ─────────────────────────────
+  {
+    patterns: [
+      /\bhow\s+much\s+(will\s+i\s+|can\s+i\s+)?earn\b/i,
+      /\bwhat\s+(are\s+the\s+|is\s+the\s+)?returns?\b/i,
+      /\bwhat\s+(is\s+the\s+|are\s+the\s+)?apy\b/i,
+      /\binterest\s+rate\b/i,
+      /\bhow\s+much\s+profit\b/i,
+      /\bexpected\s+(return|yield|apy)\b/i,
+    ],
+    answer:
+      "📈 *Expected returns*\n\n" +
+      "Returns depend on your chosen strategy:\n\n" +
+      "• *Conservative* — 3–6% APY (low risk)\n" +
+      "• *Balanced* — 6–10% APY (medium risk)\n" +
+      "• *Growth* — 10–15% APY (higher risk)\n\n" +
+      "These are *target* APYs based on current DeFi protocol rates — " +
+      "actual returns vary with market conditions.\n\n" +
+      "Reply with a strategy name to get started, or *BALANCE* to check your current earnings.",
+  },
+  // ── NEW: Lock-up / can I leave / cancel account ───────────────────────────
+  {
+    patterns: [
+      /\bam\s+i\s+locked\s+(in|up)\b/i,
+      /\block[- ]up\b/i,
+      /\bcan\s+i\s+(leave|exit|close|cancel)\b/i,
+      /\bdelete\s+my\s+account\b/i,
+      /\bclose\s+my\s+account\b/i,
+      /\bstop\s+using\b/i,
+      /\bnot\s+locked\b/i,
+      /\bfree\s+to\s+withdraw\b/i,
+    ],
+    answer:
+      "🔓 *No lock-ups, ever*\n\n" +
+      "Your funds are never locked. You can withdraw any time, any amount (minimum 10 USDC).\n\n" +
+      "Just reply *WITHDRAW* and your USDC is back in your wallet within seconds.\n\n" +
+      "No cancellation fees, no exit penalties.",
+  },
+  // ── NEW: Referral / invite friends ────────────────────────────────────────
+  {
+    patterns: [
+      /\breferral\b/i,
+      /\binvite\s+(a\s+)?(friend|someone)\b/i,
+      /\brefer\s+(a\s+)?friend\b/i,
+      /\baffiliate\b/i,
+    ],
+    answer:
+      "🎉 *Referrals*\n\n" +
+      "A referral program is coming soon! 🚀\n\n" +
+      "In the meantime, feel free to share your experience with friends. " +
+      "They can get started by messaging this number.\n\n" +
+      "Reply *HELP* to see what else you can do.",
+  },
+  // ── NEW: Support / contact ────────────────────────────────────────────────
+  {
+    patterns: [
+      /\bcontact\s+(support|us|you|team)\b/i,
+      /\bspeak\s+to\s+(a\s+)?(human|person|agent|support)\b/i,
+      /\btalk\s+to\s+(a\s+)?(human|person|agent)\b/i,
+      /\bhuman\s+support\b/i,
+      /\bget\s+help\b/i,
+      /\bemail\b.*\bsupport\b/i,
+      /\bsupport\s+email\b/i,
+    ],
+    answer:
+      "🙋 *Contact Support*\n\n" +
+      "For further assistance, reach our team at:\n" +
+      "📧 support@neurowealth.io\n\n" +
+      "We typically respond within a few hours.\n\n" +
+      "You can also reply *HELP* to see all available commands — " +
+      "I can answer most questions instantly!",
   },
 ];
 
@@ -374,14 +509,15 @@ function fallback(step: OnboardingStep | string): string {
       );
     default:
       return (
-        "🤔 I didn't understand that.\n\n" +
-        "Here's what you can do:\n" +
+        "🤔 Hmm, I'm not sure what you mean — but here are a few things I *can* help with:\n\n" +
         "• *BALANCE* — view your portfolio\n" +
         "• *DEPOSIT* — get your deposit address\n" +
         "• *WITHDRAW [amount]* — withdraw funds\n" +
-        "• *STRATEGY* — change your strategy\n" +
-        "• *HELP* — show all commands\n\n" +
-        "You can also ask me a question in plain English!"
+        "• *STRATEGY* — change your investment strategy\n" +
+        "• *HELP* — see all commands\n\n" +
+        "You can also ask me questions like:\n" +
+        "_\"Is my money safe?\"_, _\"What are the fees?\"_, _\"How do I withdraw?\"_\n\n" +
+        "Need human support? Email us at support@neurowealth.io 💚"
       );
   }
 }
