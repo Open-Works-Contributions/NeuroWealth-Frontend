@@ -1,5 +1,8 @@
 import type { Metadata } from "next";
 import "./globals.css";
+import { ErrorBoundary } from "@/components/ErrorBoundary";
+import { DiagnosticsPanel } from "@/components/diagnostics/DiagnosticsPanel";
+import { AuthProvider } from "@/contexts/AuthContext";
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://neurowealth.app"),
@@ -58,7 +61,14 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" className="dark" suppressHydrationWarning>
-      <body className="antialiased">{children}</body>
+      <body className="antialiased font-sans bg-dark-900 text-slate-200">
+        <AuthProvider>
+          <ErrorBoundary>
+            {children}
+            <DiagnosticsPanel />
+          </ErrorBoundary>
+        </AuthProvider>
+      </body>
     </html>
   );
 }
